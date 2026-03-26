@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MedBot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <style>
+    #chatbox { padding: 1rem; max-width: 420px; margin: 40px auto; font-family: 'Poppins', sans-serif; }
+    #messages { height: 380px; overflow-y: auto; border: 1px solid #ddd; padding: 0.6rem; background: #fafafa; border-radius: 8px; }
+    .user { text-align: right; margin: 8px 0; color: #111; background: #d1e7ff; display: inline-block; padding: 6px 10px; border-radius: 8px; max-width: 85%; }
+    .bot { text-align: left; margin: 8px 0; color: #003366; background: #e8f0fe; display: inline-block; padding: 6px 10px; border-radius: 8px; max-width: 85%; }
+    #userInput { flex: 1; padding: 0.6rem; border: 1px solid #ccc; border-radius: 6px; }
+    #sendBtn { padding: 0.6rem 1rem; border: none; background: #0078d7; color: white; border-radius: 6px; cursor: pointer; }
+    #sendBtn:hover { background: #005bb5; }
+    .input-area { display: flex; gap: 0.5rem; margin-top: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div id="chatbox">
+    <h2 style="text-align:center; color:#004080;">💬 MedBot Assistant</h2>
+    <div id="messages"></div>
+    <div class="input-area">
+      <input id="userInput" placeholder="Ask MedBot anything..." />
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <script>
+  const messagesEl = document.getElementById("messages");
+  const input = document.getElementById("userInput");
+  let userLocation = null;
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      userLocation = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+    },
+    () => {
+      console.warn("⚠️ Location access denied");
+    }
+  );
+
+  function append(type, text) {
+    const d = document.createElement("div");
+    d.className = type;
+    d.textContent = text;
+    messagesEl.appendChild(d);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const msg = input.value.trim();
+    if (!msg) return;
+    append("user", "You: " + msg);
+    input.value = "";
+    try {
+      const payload = { message: msg };
+      if (userLocation) {
+        payload.lat = userLocation.lat;
+        payload.lon = userLocation.lon;
+      }
+      const r = await fetch("/api/llm/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await r.json();
+      append("bot", "MedBot: " + (data.reply || "Sorry, no response"));
+    } catch (err) {
+      append("bot", "MedBot: Network error");
+    }
+  }
+
+  document.getElementById("sendBtn").addEventListener("click", sendMessage);
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") sendMessage(); });
+  </script>
+</body>
+</html>
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MedBot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div id="chatbox" class="card">
+    <h2 style="text-align:center;color:#073e55">💬 MedBot Assistant</h2>
+
+    <div style="display:flex;gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:8px;">
+      <button class="chip" onclick="quick('I met with a road accident. What immediate steps should I take?','emergency')">Road accident</button>
+      <button class="chip" onclick="quick('Someone is having chest pain. What immediate measures?','emergency')">Chest pain</button>
+      <button class="chip" onclick="quick('Severe stomach pain, what to do?','advice')">Stomach pain</button>
+      <button class="chip" onclick="openNearbyDoctor()">Find nearby doctor</button>
+    </div>
+
+    <div id="messages"></div>
+
+    <div class="input-area" style="margin-top:10px">
+      <input id="userInput" placeholder="Describe symptoms or ask for help..." />
+      <button id="sendBtn" class="book-btn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById('messages');
+    let userLocation = null;
+
+    window.addEventListener('message', (ev) => {
+      if (ev.data && ev.data.prefill) {
+        document.getElementById('userInput').value = ev.data.prefill;
+      }
+    }, false);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos)=>{ userLocation={lat:pos.coords.latitude, lon:pos.coords.longitude}; }, ()=>{});
+    }
+
+    function appendCls(cls, text){
+      const d = document.createElement('div'); d.className = cls; d.textContent = text; d.style.margin='8px 0'; messagesEl.appendChild(d); messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    async function sendToLLM(body){
+      try {
+        const r = await fetch('/api/llm/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+        const js = await r.json();
+        return js;
+      } catch(e){ return { reply: 'Network error' }; }
+    }
+
+    async function sendMessage(){
+      const msg = document.getElementById('userInput').value.trim();
+      if (!msg) return;
+      appendCls('user','You: '+msg);
+      document.getElementById('userInput').value='';
+      const payload = { message: msg, location: userLocation };
+      const res = await sendToLLM(payload);
+      appendCls('bot', 'MedBot: ' + (res.reply || 'No response'));
+      // if LLM returns suggested doctor id or text with "NEARBY:" parse and show link (implementation depends on backend)
+      if (res.suggested_doctor) {
+        appendCls('bot', `Suggested doctor: ${res.suggested_doctor.name} — Click to book.`);
+      }
+    }
+
+    function quick(text, severity){
+      document.getElementById('userInput').value = text;
+      sendMessage();
+    }
+
+    document.getElementById('sendBtn').addEventListener('click', sendMessage);
+    document.getElementById('userInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+    function openNearbyDoctor(){ window.open('/', '_blank'); }
+  </script>
+</body>
+</html> -->

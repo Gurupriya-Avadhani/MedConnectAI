@@ -1,0 +1,281 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Patient Dashboard - MedConnectAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script defer>
+    // Haversine distance (km)
+    function haversine(lat1, lon1, lat2, lon2) {
+      function toRad(v){ return v * Math.PI/180; }
+      const R = 6371;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    async function loadDoctors(userLocation=null) {
+      try {
+        const res = await fetch("{{ url_for('get_doctors') | replace('/api/doctors','/api/doctors') }}");
+        const doctors = await res.json();
+        const container = document.getElementById("doctor-list");
+        container.innerHTML = "";
+
+        // If we have userLocation, compute distance and sort
+        if (userLocation) {
+          doctors.forEach(d => {
+            d._distance = (d.latitude && d.longitude) ? haversine(userLocation.lat, userLocation.lon, d.latitude, d.longitude) : 9999;
+          });
+          doctors.sort((a,b) => a._distance - b._distance);
+        }
+
+        if (doctors.length === 0) {
+          container.innerHTML = "<p>No doctors found.</p>";
+          return;
+        }
+
+        doctors.forEach(doc => {
+          const card = document.createElement("div");
+          card.className = "doctor-card";
+          card.innerHTML = `
+            <h3>${doc.name}</h3>
+            <p>Specialization: ${doc.specialization}</p>
+            <p>Availability: ${doc.available ? "🟢 Available" : "🔴 Not Available"}</p>
+            <p>Hospital: ${doc.hospital_name || "Unknown"} (${doc.hospital_id || "—"})</p>
+            ${doc._distance !== undefined && doc._distance !== 9999 ? `<p>Distance: ${doc._distance.toFixed(2)} km</p>` : ""}
+            <button ${!doc.available ? "disabled" : ""} class="book-btn" data-id="${doc.doctor_id}">${doc.available ? "Book" : "Not available"}</button>
+          `;
+          container.appendChild(card);
+        });
+
+        // attach handlers
+        document.querySelectorAll(".book-btn").forEach(b => {
+          b.addEventListener("click", async (e) => {
+            const docId = e.currentTarget.dataset.id;
+            const confirmBooking = confirm("Book appointment with this doctor now?");
+            if (!confirmBooking) return;
+            try {
+              const r = await fetch("/patient/book_appointment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ doctor_id: Number(docId), emergency: false })
+              });
+              const data = await r.json();
+              if (r.ok) {
+                alert(data.message || "Booked");
+                // reload doctors to update UI if needed
+                loadDoctors(null);
+              } else {
+                alert(data.error || "Booking failed");
+              }
+            } catch (err) {
+              console.error(err);
+              alert("Network error");
+            }
+          });
+        });
+
+      } catch (err) {
+        console.error("Error loading doctors", err);
+        document.getElementById("doctor-list").innerHTML = "<p>Error loading doctors.</p>";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // initial load without geolocation
+      loadDoctors();
+
+      document.getElementById("nearbyBtn").addEventListener("click", () => {
+        if (!navigator.geolocation) {
+          alert("Geolocation not supported by your browser.");
+          return;
+        }
+        navigator.geolocation.getCurrentPosition((pos) => {
+          loadDoctors({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+        }, (err) => {
+          alert("Unable to fetch location. Make sure you allowed location access.");
+        }, { enableHighAccuracy: true, timeout: 8000 });
+      });
+
+      // chatbot button opens small chatbot modal or new window (simple behavior)
+      document.getElementById("chatbot-btn").addEventListener("click", () => {
+        // open chatbot component in a popup/modal — simple open new window
+        window.open("/templates/components/chatbot.html", "MedBot", "width=420,height=600");
+        window.open("/chatbot","MedBot","width=420,height=600");
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h2>Welcome {{ patient.name }}</h2>
+    <nav>
+      <form action="{{ url_for('logout') }}" method="GET">
+        <button type="submit">Logout</button>
+      </form>
+    </nav>
+  </header>
+
+  <main>
+    <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+      <input id="searchBar" type="text" placeholder="Search doctors by name or specialization...">
+      <button id="nearbyBtn">Find Nearby Doctor</button>
+      <button id="chatbot-btn">Ask MedBot</button>
+    </div>
+
+    <div id="doctor-list" style="margin-top:1rem;">
+      filled by JS
+    </div>
+  </main>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Patient Dashboard - MedConnectAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+  <script defer>
+    function haversine(lat1, lon1, lat2, lon2) {
+      function toRad(v){ return v * Math.PI/180; }
+      const R = 6371;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a = Math.sin(dLat/2)**2 +
+                Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*
+                Math.sin(dLon/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    async function loadDoctors(userLocation=null) {
+      try {
+        const res = await fetch("{{ url_for('get_doctors') | replace('/api/doctors','/api/doctors') }}");
+        const doctors = await res.json();
+        const container = document.getElementById("doctor-list");
+        container.innerHTML = "";
+
+        if (userLocation) {
+          doctors.forEach(d => {
+            d._distance = (d.latitude && d.longitude)
+              ? haversine(userLocation.lat, userLocation.lon, d.latitude, d.longitude)
+              : 9999;
+          });
+          doctors.sort((a,b) => a._distance - b._distance);
+        }
+
+        if (doctors.length === 0) {
+          container.innerHTML = "<p style='color:var(--text-muted)'>No doctors found.</p>";
+          return;
+        }
+
+        doctors.forEach(doc => {
+          const card = document.createElement("div");
+          card.className = "doctor-card";
+          card.innerHTML = `
+            <h3>${doc.name}</h3>
+            <div class="doctor-meta">${doc.specialization} • ${doc.hospital_name || "Unknown"}</div>
+            <div class="doctor-meta">Status: ${doc.available ? "🟢 Available" : "🔴 Not Available"}</div>
+            ${doc._distance !== 9999 ? `<div class="doctor-meta">Distance: ${doc._distance.toFixed(2)} km</div>` : ""}
+            <div class="doctor-actions" style="margin-top:0.6rem;">
+              <button ${!doc.available ? "disabled" : ""}
+                      class="book-btn"
+                      data-id="${doc.doctor_id}">
+                ${doc.available ? "Book" : "Unavailable"}
+              </button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+        document.querySelectorAll(".book-btn").forEach(b => {
+          b.addEventListener("click", async e => {
+            const id = e.target.dataset.id;
+            if (!confirm("Book appointment?")) return;
+
+            const r = await fetch("/patient/book_appointment", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ doctor_id: Number(id), emergency: false })
+            });
+
+            const data = await r.json();
+            if (r.ok) {
+              alert("Appointment booked");
+              loadDoctors();
+            } else alert(data.error);
+          });
+        });
+
+      } catch {
+        document.getElementById("doctor-list").innerHTML = "<p>Error loading doctors.</p>";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadDoctors();
+
+      document.getElementById("nearbyBtn").addEventListener("click", () => {
+        navigator.geolocation.getCurrentPosition(
+          pos => loadDoctors({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+          () => alert("Unable to fetch location.")
+        );
+      });
+
+      const delForm = document.getElementById("delete-patient-form");
+      if (delForm) {
+        delForm.addEventListener("submit", e => {
+          if (!confirm("Delete your account permanently?")) e.preventDefault();
+        });
+      }
+    });
+  </script>
+</head>
+
+<body>
+
+<header class="header container">
+  <div class="brand">
+    <div class="logo">MC</div>
+    <div>
+      <h1>MedConnectAI</h1>
+      <div style="font-size:0.85rem; color:var(--text-muted)">Patient Dashboard</div>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <a class="btn ghost" href="{{ url_for('home') }}">Home</a>
+    <a class="btn" href="{{ url_for('chatbot') }}">Ask MedBot</a>
+
+    <form id="delete-patient-form" action="{{ url_for('delete_account') }}" method="POST">
+      <button class="btn danger-btn" type="submit">Delete Account</button>
+    </form>
+
+    <form action="{{ url_for('logout') }}" method="GET">
+      <button class="btn" type="submit">Logout</button>
+    </form>
+  </div>
+</header>
+
+<main class="container">
+
+  <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+    <input id="searchBar" type="text"
+           placeholder="Search doctors by name or specialization..."
+           style="flex:1; max-width:650px;">
+    <button id="nearbyBtn" class="btn">Find Nearby</button>
+  </div>
+
+  <div id="doctor-list" style="margin-top:1.4rem;"></div>
+
+  <footer>&copy; 2025 MedConnectAI</footer>
+
+</main>
+</body>
+</html>

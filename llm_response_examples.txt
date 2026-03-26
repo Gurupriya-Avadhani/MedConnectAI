@@ -1,0 +1,8 @@
+Q: How can I book an appointment?
+A: You can book an appointment by searching for your doctor and selecting a time slot.
+
+Q: Which doctor specializes in cardiology?
+A: Dr. Smith specializes in cardiology.
+
+Q: What are the hospital visiting hours?
+A: Visiting hours are from 8 AM to 8 PM every day.

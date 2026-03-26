@@ -1,0 +1,543 @@
+/* ---------- GLOBAL STYLES ---------- */
+/* body {
+  font-family: 'Poppins', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f6fa;
+  color: #2f3640;
+}
+
+header {
+  background-color: #2f3640;
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+header h1, header h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+header button {
+  background-color: #e84118;
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  margin-left: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  transition: 0.3s ease;
+}
+
+header button:hover {
+  background-color: #c23616;
+}
+
+main {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+} */
+
+/* ---------- SEARCH & ACTION BUTTONS ---------- */
+/* #searchBar {
+  width: 100%;
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button#nearbyBtn, button#chatbot-btn {
+  background-color: #00a8ff;
+  color: white;
+  border: none;
+  padding: 0.7rem 1rem;
+  margin: 0.3rem 0.5rem 1rem 0;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+button#nearbyBtn:hover, button#chatbot-btn:hover {
+  background-color: #0097e6;
+} */
+
+/* ---------- DOCTOR LIST ---------- */
+/* #doctor-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.doctor-card {
+  background-color: #fff;
+  padding: 1rem 1.2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.doctor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.doctor-card h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #273c75;
+}
+
+.doctor-card p {
+  margin: 0.4rem 0;
+  font-size: 0.95rem;
+}
+
+.doctor-card button.book-btn {
+  background-color: #44bd32;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.doctor-card button.book-btn:hover {
+  background-color: #4cd137;
+}
+
+.doctor-card button.book-btn:disabled {
+  background-color: #7f8fa6;
+  cursor: not-allowed;
+} */
+
+/* ---------- APPOINTMENTS SECTION ---------- */
+/* #appointments {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+#appointments p {
+  font-size: 0.95rem;
+  margin: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.3rem;
+} */
+
+/* ---------- NOTIFICATIONS ---------- */
+/* #notifications {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+#notifications h3 {
+  margin-top: 0;
+  color: #273c75;
+  font-size: 1.2rem;
+}
+
+#notifications p {
+  font-size: 0.95rem;
+  margin: 0.4rem 0;
+  border-left: 3px solid #00a8ff;
+  padding-left: 0.5rem;
+} */
+
+/* ---------- AVAILABILITY SECTION ---------- */
+/* #update-availability {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+#update-availability h3 {
+  color: #273c75;
+}
+
+#availabilityCheckbox {
+  transform: scale(1.2);
+  margin-right: 0.5rem;
+}
+
+#updateAvailabilityBtn {
+  background-color: #0097e6;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 5px;
+  margin-top: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#updateAvailabilityBtn:hover {
+  background-color: #00a8ff;
+} */
+
+/* ---------- LOGIN & ROLE SELECTION ---------- */
+/* form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 400px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+form input {
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+form button {
+  background-color: #00a8ff;
+  color: #fff;
+  border: none;
+  padding: 0.7rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s ease;
+}
+
+form button:hover {
+  background-color: #0097e6;
+}
+
+form p.error {
+  color: #e84118;
+  font-weight: 500;
+}
+
+form button[name="role"] {
+  background-color: #44bd32;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 5px;
+  margin: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s ease;
+}
+
+form button[name="role"]:hover {
+  background-color: #4cd137;
+} */
+
+/* ---------- FOOTER ---------- */
+/* footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #2f3640;
+  color: #fff;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+} */
+
+/* ---------- RESPONSIVE DESIGN ---------- */
+/* @media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  main {
+    padding: 1rem;
+  }
+
+  .doctor-card {
+    padding: 1rem;
+  }
+} */
+
+
+
+
+/* ---------- THEME ---------- */
+:root {
+  --primary: #1976ff;
+  --primary-light: #68a3ff;
+  --primary-dark: #0b3ea8;
+
+  --bg: #f4f7ff;
+  --bg-alt: #e8efff;
+
+  --card-bg: #ffffff;
+  --panel-bg: #ffffff;
+  --border: #d7e2ff;
+
+  --text: #1a1f29;
+  --text-muted: #5b6275;
+}
+
+/* ---------- GLOBAL ---------- */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ---------- HEADER ---------- */
+header {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+}
+
+.header .logo {
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  font-size: 1.2rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--primary);
+  color: white;
+  transition: 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+}
+
+.btn.ghost {
+  background: #e7eeff;
+  color: var(--primary-dark);
+}
+
+.btn.ghost:hover {
+  background: var(--primary-light);
+  color: white;
+}
+
+.btn.danger-btn {
+  background: #ff4e4e;
+}
+
+.btn.danger-btn:hover {
+  background: #d63d3d;
+}
+
+/* ---------- MAIN ---------- */
+main {
+  max-width: 1150px;
+  margin: auto;
+  padding: 2rem;
+}
+
+/* ---------- WELCOME SECTION ---------- */
+.welcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+.welcome-title {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+}
+
+.welcome-desc {
+  color: var(--text-muted);
+}
+
+/* Banner image */
+.banner {
+  width: 45%;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+/* Role buttons */
+.role-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.role-btn {
+  padding: 0.7rem 1.4rem;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.role-btn:hover {
+  background: var(--primary-dark);
+}
+
+.role-btn.secondary {
+  background: #e7eeff;
+  color: var(--primary-dark);
+}
+
+.role-btn.secondary:hover {
+  background: var(--primary-light);
+  color: white;
+}
+
+/* ---------- DOCTOR LIST ---------- */
+#doctor-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px,1fr));
+  gap: 1.4rem;
+}
+
+.doctor-card {
+  background: #fff;
+  padding: 1.3rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  transition: 0.2s ease;
+}
+
+.doctor-card:hover {
+  transform: translateY(-4px);
+}
+
+.doctor-meta {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
+}
+
+.book-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.book-btn:hover {
+  background: var(--primary-dark);
+}
+
+.book-btn:disabled {
+  background: #adb8d0;
+  cursor: not-allowed;
+}
+
+/* ---------- SEARCH ---------- */
+#searchBar {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+
+/* ---------- PANELS (Doctor dashboard) ---------- */
+.panel {
+  background: #fff;
+  padding: 1.7rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.kv {
+  margin-bottom: 0.4rem;
+}
+
+.appt-row {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  margin-top: 3rem;
+  text-align: center;
+  color: var(--text-muted);
+  padding: 1rem;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 850px) {
+  .welcome {
+    flex-direction: column;
+  }
+  .banner {
+    width: 100%;
+  }
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}

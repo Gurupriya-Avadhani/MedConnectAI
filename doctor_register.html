@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Doctor Registration - MedConnectAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <main style="max-width:480px; margin:auto; padding:2rem;">
+    <h2>Doctor Registration</h2>
+    {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+    <form method="POST" style="display:flex; flex-direction:column; gap:0.8rem;">
+      <label>Name</label>
+      <input name="name" type="text" required>
+
+      <label>Email</label>
+      <input name="email" type="email" required>
+
+      <label>Password</label>
+      <input name="password" type="password" required>
+
+      <label>Contact</label>
+      <input name="contact" type="text">
+
+      <label>Specialization</label>
+      <input name="specialization" type="text" required>
+
+      <label>Experience (years)</label>
+      <input name="experience" type="number" min="0">
+
+      <label>Hospital ID</label>
+      <input name="hospital_id" type="text">
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p style="margin-top:1rem;">Already registered? <a href="{{ url_for('doctor_bp.doctor_login') }}">Login here</a></p>
+    <p style="margin-top:0.5rem;"><a href="{{ url_for('home') }}">Back to home</a></p>
+  </main>
+</body>
+</html>

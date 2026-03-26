@@ -1,0 +1,192 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Doctor Dashboard - MedConnectAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script defer>
+    async function toggleAvailability() {
+      try {
+        // We toggle locally and send current value to server
+        const btn = document.getElementById('updateAvailabilityBtn');
+        const newAvailable = btn.dataset.available === "true" ? false : true;
+        const res = await fetch("{{ url_for('update_availability') | replace('/api/doctor/update_availability','/doctor/update_availability') }}", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ available: newAvailable })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          btn.dataset.available = (newAvailable).toString();
+          btn.textContent = newAvailable ? "Go Offline" : "Go Online";
+          document.getElementById('availStatus').textContent = newAvailable ? "Available" : "Not Available";
+        } else {
+          alert(data.error || "Failed to update availability");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Network error");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById('updateAvailabilityBtn');
+      if (btn) btn.addEventListener('click', toggleAvailability);
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h2>Welcome Dr. {{ doctor.name }}</h2>
+    <nav>
+      <form action="{{ url_for('logout') }}" method="GET">
+        <button type="submit">Logout</button>
+      </form>
+    </nav>
+  </header>
+
+  <main>
+    <section id="overview">
+      <p><strong>Hospital ID:</strong> {{ doctor.hospital_id or '—' }}</p>
+      <p><strong>Contact:</strong> {{ doctor.contact or '—' }}</p>
+      <p><strong>Availability:</strong> <span id="availStatus">{{ 'Available' if doctor.available else 'Not Available' }}</span></p>
+      <button id="updateAvailabilityBtn" data-available="{{ 'true' if doctor.available else 'false' }}">{{ 'Go Offline' if doctor.available else 'Go Online' }}</button>
+    </section>
+
+    <section id="appointments">
+      <h3>Your Appointments</h3>
+      {% if appointments %}
+        <div>
+          {% for appt in appointments %}
+            <div style="padding:0.6rem 0; border-bottom:1px solid #eee;">
+              <strong>Patient:</strong> {{ appt.patient.name if appt.patient else appt.patient_id }}
+              &nbsp; | &nbsp; <strong>Status:</strong> {{ appt.status }}
+              &nbsp; | &nbsp; <strong>Date:</strong> {{ appt.appointment_date }} <strong>Time:</strong> {{ appt.appointment_time }}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No appointments yet.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Doctor Dashboard - MedConnectAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+  <script defer>
+    async function toggleAvailability() {
+      try {
+        const btn = document.getElementById("updateAvailabilityBtn");
+        const newAvailable = btn.dataset.available === "true" ? false : true;
+
+        const res = await fetch("{{ url_for('update_availability') | replace('/api/doctor/update_availability','/doctor/update_availability') }}", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ available: newAvailable })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          btn.dataset.available = newAvailable.toString();
+          btn.textContent = newAvailable ? "Go Offline" : "Go Online";
+          document.getElementById("availStatus").textContent = newAvailable ? "Available" : "Not Available";
+        } else alert(data.error || "Failed to update");
+      } catch {
+        alert("Network error");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("updateAvailabilityBtn").addEventListener("click", toggleAvailability);
+
+      const deleteForm = document.getElementById("delete-doctor-form");
+      if (deleteForm) {
+        deleteForm.addEventListener("submit", e => {
+          if (!confirm("Delete your account permanently?")) e.preventDefault();
+        });
+      }
+    });
+  </script>
+</head>
+
+<body>
+<header class="header container">
+  <div class="brand">
+    <div class="logo">MC</div>
+    <div>
+      <h1>MedConnectAI</h1>
+      <div style="font-size:0.85rem; color:var(--text-muted)">Doctor Dashboard</div>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <a class="btn ghost" href="{{ url_for('home') }}">Home</a>
+
+    <form action="{{ url_for('logout') }}" method="GET">
+      <button class="btn" type="submit">Logout</button>
+    </form>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="grid-2">
+    <section class="panel">
+      <h3>Welcome, Dr. {{ doctor.name }}</h3>
+
+      <div class="kv"><strong>Hospital ID:</strong> {{ doctor.hospital_id or "—" }}</div>
+      <div class="kv"><strong>Contact:</strong> {{ doctor.contact or "—" }}</div>
+      <div class="kv"><strong>Availability:</strong> <span id="availStatus">{{ "Available" if doctor.available else "Not Available" }}</span></div>
+
+      <div style="margin-top:1rem;">
+        <button id="updateAvailabilityBtn"
+                data-available="{{ 'true' if doctor.available else 'false' }}"
+                class="btn">
+          {{ "Go Offline" if doctor.available else "Go Online" }}
+        </button>
+
+        <!-- <a class="btn ghost" href="{{ url_for('doctor_bp.doctor_register') }}">Edit Profile</a> -->
+
+        <form id="delete-doctor-form" action="{{ url_for('delete_account') }}" method="POST" style="display:inline;">
+          <button class="btn danger-btn" type="submit">Delete Account</button>
+        </form>
+      </div>
+
+      <h4 style="margin-top:1.4rem;">Your Appointments</h4>
+      {% if appointments %}
+        {% for appt in appointments %}
+          <div class="appt-row">
+            <div><strong>Patient:</strong> {{ appt.patient.name if appt.patient else appt.patient_id }}</div>
+            <div style="color:var(--text-muted); font-size:0.9rem;">
+              {{ appt.appointment_date }} • {{ appt.appointment_time }}
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p style="color:var(--text-muted)">No appointments yet.</p>
+      {% endif %}
+    </section>
+
+    <!-- <aside class="panel"> -->
+      <!-- <h4>Quick Actions</h4> -->
+      <!-- <div style="margin-top:0.6rem; display:flex; flex-direction:column; gap:0.6rem;"> -->
+        <!-- <a class="btn" href="{{ url_for('patient_bp.patient_dashboard') }}">View Patients</a> -->
+        <!-- <a class="btn ghost" href="{{ url_for('get_doctors') }}">Browse Doctors</a> -->
+      <!-- </div> -->
+    <!-- </aside> -->
+  </div>
+
+  <footer>&copy; 2025 MedConnectAI</footer>
+</main>
+</body>
+</html>

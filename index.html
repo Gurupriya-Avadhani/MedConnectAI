@@ -1,0 +1,75 @@
+ <!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MedConnectAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+</head>
+<body>
+  <main style="max-width:900px; margin:auto; padding:2rem; text-align:center;">
+    <img src="{{ url_for('static', filename='assets/images/banner.jpg') }}"
+         alt="Hospital Banner" style="width:100%; border-radius:8px; margin-bottom:1.5rem;">
+    <h1>Welcome to MedConnectAI</h1>
+    <p>Select your role to continue</p>
+
+    <form action="{{ url_for('choose') }}" method="POST" style="margin-top:2rem; display:flex; justify-content:center; gap:1rem;">
+      <button type="submit" name="role" value="doctor" class="role-btn">Doctor</button>
+      <button type="submit" name="role" value="patient" class="role-btn">Patient</button>
+    </form>
+  </main>
+
+  <footer style="text-align:center; margin-top:2rem;">
+    &copy; 2025 MedConnectAI. All rights reserved.
+  </footer>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MedConnectAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+</head>
+
+<body>
+<header class="header container">
+  <div class="brand">
+    <div class="logo">MC</div>
+    <div>
+      <h1>MedConnectAI</h1>
+      <div style="font-size:0.85rem; color:var(--text-muted)">Smart Hospital Assistant</div>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <a class="btn ghost" href="{{ url_for('home') }}">Home</a>
+    <!-- <a class="btn" href="{{ url_for('chatbot') }}">Ask MedBot</a> -->
+  </div>
+</header>
+
+<main class="container">
+  <section class="welcome">
+    <div class="left">
+      <h2 class="welcome-title">Welcome to MedConnectAI</h2>
+      <p class="welcome-desc">Find doctors, book appointments, and get quick responses with MedBot.</p>
+
+      <form action="{{ url_for('choose') }}" method="POST" class="role-row">
+        <button type="submit" name="role" value="doctor" class="role-btn">Doctor</button>
+        <button type="submit" name="role" value="patient" class="role-btn">Patient</button>
+        <!-- <a class="role-btn secondary" href="{{ url_for('get_doctors') }}">Browse Doctors</a> -->
+      </form>
+    </div>
+
+    <img class="banner" src="{{ url_for('static', filename='assets/images/banner.jpg') }}" alt="Hospital Banner">
+  </section>
+
+  <footer>&copy; 2025 MedConnectAI</footer>
+</main>
+</body>
+</html>

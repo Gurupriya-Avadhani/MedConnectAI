@@ -1,0 +1,35 @@
+<form id="patientForm" style="display:flex; flex-direction:column; gap:0.6rem; max-width:360px;">
+  <input id="pf_name" type="text" placeholder="Name" required />
+  <input id="pf_email" type="email" placeholder="Email" required />
+  <input id="pf_age" type="number" placeholder="Age" required />
+  <button type="submit">Register</button>
+</form>
+
+<script>
+  document.getElementById("patientForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const payload = {
+      name: document.getElementById("pf_name").value,
+      email: document.getElementById("pf_email").value,
+      age: Number(document.getElementById("pf_age").value)
+    };
+    try {
+      const r = await fetch("/patient/register", {
+        method: "POST",
+        headers: {"Content-Type":"application/x-www-form-urlencoded"},
+        // this form expects server to handle form POST; if you want JSON change backend accordingly
+        body: new URLSearchParams(payload)
+      });
+      // If backend returns HTML (redirect), handle accordingly; here we'll just reload
+      if (r.redirected) {
+        window.location = r.url;
+      } else {
+        const t = await r.text();
+        alert("Registration completed (server responded).");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Network error");
+    }
+  });
+</script>
